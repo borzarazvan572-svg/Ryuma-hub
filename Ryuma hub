@@ -1,0 +1,52 @@
+-- RYUMA DUELS ULTIMATE (KWARTA STYLE)
+local lp = game.Players.LocalPlayer
+local sg = Instance.new("ScreenGui", game.CoreGui)
+
+-- FIX MOARTE INF JUMP
+local infJ = false
+game:GetService("UserInputService").JumpRequest:Connect(function()
+    if infJ and lp.Character and lp.Character:FindFirstChild("Humanoid") then
+        lp.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+        task.wait()
+        lp.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        lp.Character.HumanoidRootPart.Velocity = Vector3.new(0, 50, 0)
+    end
+end)
+
+-- DESIGN BUTOANE PLUTITOARE (Ca în poză)
+local function CreateBtn(name, pos, callback)
+    local b = Instance.new("TextButton", sg)
+    b.Text = name
+    b.Size = UDim2.new(0, 110, 0, 35)
+    b.Position = pos
+    b.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    b.TextColor3 = Color3.new(1, 1, 1)
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 11
+    b.Draggable = true
+    local c = Instance.new("UICorner", b)
+    c.CornerRadius = UDim.new(0, 10)
+    
+    local dot = Instance.new("Frame", b)
+    dot.Size = UDim2.new(0, 7, 0, 7)
+    dot.Position = UDim2.new(0, 7, 0.5, -3)
+    dot.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    Instance.new("UICorner", dot).CornerRadius = UDim.new(1,0)
+
+    local active = false
+    b.MouseButton1Click:Connect(function()
+        active = not active
+        dot.BackgroundColor3 = active and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(100, 100, 100)
+        callback(active)
+    end)
+end
+
+-- Butoanele tale:
+CreateBtn("AIM BAT", UDim2.new(0.2, 0, 0.2, 0), function(s) end)
+CreateBtn("TP DOWN", UDim2.new(0.2, 0, 0.3, 0), function(s) end)
+CreateBtn("MELEE AIM", UDim2.new(0.6, 0, 0.2, 0), function(s) end)
+CreateBtn("AUTO PLAY", UDim2.new(0.75, 0, 0.4, 0), function(s) end)
+CreateBtn("INF JUMP", UDim2.new(0.4, 0, 0.8, 0), function(s) infJ = s end)
+CreateBtn("SPEED 60", UDim2.new(0.1, 0, 0.5, 0), function(s) 
+    lp.Character.Humanoid.WalkSpeed = s and 60 or 16 
+end)
